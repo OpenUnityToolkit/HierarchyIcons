@@ -1,6 +1,6 @@
 {
     "name": "com.opentoolkit.hierachyicons",
-    "rootNamespace": "OpenToolKit.HierarchyIcons",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [
         "Editor"
@@ -9,7 +9,7 @@
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
-    "autoReferenced": false,
+    "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false

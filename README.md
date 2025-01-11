@@ -1,7 +1,7 @@
 # Hierarchy Icons
 Replaces the standard cubes in the Scene Hierarchy with more informative icons.
 
-![Image](.DocRef/hierarchy-beforeafter.png "before-after")
+![Image](Documentation~/hierarchy-beforeafter.png)
 
 ## Features
 - Icons are sourced from:
@@ -19,24 +19,38 @@ Replaces the standard cubes in the Scene Hierarchy with more informative icons.
 ## Preferences
 The plugin can be configured in Preferences Open Toolkit > Hierarchy Icons
 
-![Image](.DocRef/hierarchy-config.png "config")
+![Image](Documentation~/hierarchy-config.png)
 
+## Setting Icons
+You can set an icon for your own components by selecting the script in the project browser and setting an icon
+
+![Image](Documentation~/hierarchy-setscripticon.png)
+
+You can similarly set an icon for Game Objects in a scene or prefab
+
+![Image](Documentation~/hierarchy-seticongameobject.png)
+
+You can use any texture in your project as an icon, but it should be square, 32x32 or larger and uncompressed.
+
+![Image](Documentation~/hierarchy-iconconfig.png)
 
 ## Compatibility
 Minimum version Unity 2019.4
-Tested with Unity 2020.3 and 2021.1
+Tested with Unity 2019.4, 2020.3, 2021.1, and Unity 6
+
+Currently compatible with dark mode
 
 ## Installing
 Copy the git URL from GitHub
 
-![Image](.DocRef/hierarchy-copyurl.png)
+![Image](Documentation~/hierarchy-copyurl.png)
 
 
 Open `Window > Package Manager` and select `+ > Add page from git URL...`
 
-![Image](.DocRef/hierarchy-addpackage.png)
+![Image](Documentation~/hierarchy-addpackage.png)
 
 
 Paste the URL and click `Add`
 
-![Image](.DocRef/hierarchy-urlpaste.png)
+![Image](Documentation~/hierarchy-urlpaste.png)

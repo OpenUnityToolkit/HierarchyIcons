@@ -7,9 +7,9 @@ using OpenToolkit.HierarchyIcons.Utility;
 
 namespace OpenToolkit.HierarchyIcons.Extensions
 {
-    public static class HierarchyMeshes
+    public static class MeshOverrides
     {
-        static readonly string KEY = $"{typeof(HierarchyMeshes).FullName}.config";
+        static readonly string KEY = $"{typeof(MeshOverrides).FullName}.config";
         public static bool ShowPrimitivesIcon => _showPrimitivesIcon.Value;
         private static SettingBool _showPrimitivesIcon = new SettingBool($"{KEY}.showPrimitivesIcon", "Show indicative icons for meshes")
         {
@@ -49,6 +49,11 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 
         static void IconDataCreated(IconData iconData)
         {
+            if (!iconData.AllowOverride)
+            {
+                return;
+            }
+
             Component component = iconData.Component;
 
             if (ShowPrimitivesIcon && component is MeshFilter meshFilter)

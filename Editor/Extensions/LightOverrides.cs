@@ -7,11 +7,11 @@ using OpenToolkit.HierarchyIcons.Utility;
 
 namespace OpenToolkit.HierarchyIcons.Extensions
 {
-    public static class HierarchyLights
+    public static class LightOverrides
     {
-        static readonly string KEY = $"{typeof(HierarchyLights).FullName}.config.";
+        static readonly string KEY = $"{typeof(LightOverrides).FullName}.config.";
         public static bool IsEnabled => _setting.Value;
-        private static SettingBool _setting = new SettingBool(KEY + "showLightColors", "Show light colors")
+        private static SettingBool _setting = new SettingBool(KEY + "showLightColors", "Show light colours")
         {
             Category = "Icons"
         };
@@ -49,6 +49,11 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 
         static void SetLightIcons(IconData iconData)
         {
+            if (!iconData.AllowOverride)
+            {
+                return;
+            }
+
             if (iconData.Component is Light light)
             {
                 if (light.type == LightType.Spot)

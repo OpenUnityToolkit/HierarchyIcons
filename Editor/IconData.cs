@@ -25,6 +25,8 @@ namespace OpenToolkit.HierarchyIcons
 
         public bool HideIconWhenPrefab;
 
+        public bool AllowOverride = true;
+
         public IconData() { }
 
     }

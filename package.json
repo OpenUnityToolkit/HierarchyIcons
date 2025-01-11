@@ -1,8 +1,8 @@
 {
-  "name": "com.unityopentoolkit.hierarchyicons",
+  "name": "com.opentoolkit.hierarchyicons",
   "displayName": "Hierarchy Icons",
-  "version": "0.9.0",
-  "description": "Adds components based icons to the Unity Scene Hierarchy Window.",
+  "version": "0.9.1-alpha",
+  "description": "Replaces the standard cubes in the Scene Hierarchy with more informative icons.",
   "license": "MIT",
   "keywords": [
     "icons",
@@ -11,9 +11,9 @@
     "editor",
     "tools"
   ],
-    "author"       : {
-        "name" : "Jordan Russell",
-        "email" : "jordanrussell@live.com",
+	"author"       : {
+		"name" : "Unity Open Toolkit",
+		"email" : "jordanrussell@live.com",
 		 "url": "https://github.com/UnityOpenToolkit"
-    }
+	}
 }

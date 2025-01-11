@@ -39,6 +39,11 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 
         public static void IconDataCreated(IconData iconData)
         {
+            if (!iconData.AllowOverride)
+            {
+                return;
+            }
+
             if (iconData.Component == null)
             {
                 return;

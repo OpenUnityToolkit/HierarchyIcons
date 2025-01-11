@@ -7,9 +7,9 @@ using OpenToolkit.HierarchyIcons.Utility;
 
 namespace OpenToolkit.HierarchyIcons.Extensions
 {
-    public static class HierarchyFolder
+    public static class FolderOverrides
     {
-        static readonly string KEY = $"{typeof(HierarchyFolder).FullName}.config.";
+        static readonly string KEY = $"{typeof(FolderOverrides).FullName}.config.";
         public static bool IsEnabled => _setting.Value;
         private static SettingBool _setting = new SettingBool(KEY + "emptyFolderParents", "Show empty parents as folders")
         {
@@ -38,6 +38,11 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 
         public static void FindFolderIcons(IconData iconData)
         {
+            if (!iconData.AllowOverride)
+            {
+                return;
+            }
+
             if (iconData.Component is Transform transform)
             {
                 if (transform.childCount == 0)

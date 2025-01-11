@@ -36,8 +36,6 @@ namespace OpenToolkit.HierarchyIcons
         [InitializeOnLoadMethod]
         public static void Init()
         {
-            ReflectionHelper.InitReflection();
-
             ClearIconCache();
 
             DoSubscriptions();
@@ -168,7 +166,7 @@ namespace OpenToolkit.HierarchyIcons
                     return;
                 }
 
-                iconData = ComponentUtil.IconFromGameObject(gameObject);
+                iconData = HierarchyIconUtil.IconFromGameObject(gameObject);
                 s_iconCache.Add(instanceID, iconData);
 
                 OnCreateIconData?.Invoke(iconData);

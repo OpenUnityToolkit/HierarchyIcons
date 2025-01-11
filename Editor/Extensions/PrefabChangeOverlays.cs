@@ -7,9 +7,9 @@ using OpenToolkit.HierarchyIcons.Utility;
 
 namespace OpenToolkit.HierarchyIcons.Extensions
 {
-    public static class PrefabOverrideOverlays
+    public static class PrefabChangeOverlays
     {
-        static readonly string KEY = $"{typeof(ManagerOverrides).FullName}.config.";
+        static readonly string KEY = $"{typeof(PrefabChangeOverlays).FullName}.config.";
         public static bool IsEnabled => _setting.Value;
         private static SettingBool _setting = new SettingBool(KEY + "prefabOverlays", "Show prefab override overlays")
         {

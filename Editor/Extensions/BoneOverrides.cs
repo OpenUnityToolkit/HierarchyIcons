@@ -9,10 +9,11 @@ using OpenToolkit.HierarchyIcons.Utility;
 
 namespace OpenToolkit.HierarchyIcons.Extensions
 {
-    public static class HierarchyBones
+    public static class BoneOverrides
     {
+        static readonly string KEY = $"{typeof(BoneOverrides).FullName}.config.";
         public static bool IsEnabled => _setting.Value;
-        private static SettingBool _setting = new SettingBool("boneIcons", "Show icon for skinned mesh bones", defaultValue: false)
+        private static SettingBool _setting = new SettingBool(KEY + "boneIcons", "Show icon for skinned mesh bones", defaultValue: false)
         {
             Category = "Icons",
         };
@@ -44,6 +45,11 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 
         private static void RecordBones(IconData iconData)
         {
+            if (!iconData.AllowOverride)
+            {
+                return;
+            }
+
             var skinnedMeshRenderer = iconData.GameObject.GetComponent<SkinnedMeshRenderer>();
             if (skinnedMeshRenderer != null)
             {

@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace OpenToolkit.HierarchyIcons.Utility
 {
-    public static class ComponentUtil
+    public static class HierarchyIconUtil
     {
         static string[] s_skippedComponents = new string[] { "CanvasRenderer", "MeshRenderer" };
         static string[] s_lowPrioComponents = new string[] { "CanvasGroup", "Mask" };
@@ -23,6 +23,7 @@ namespace OpenToolkit.HierarchyIcons.Utility
             if (HasNullComponent(components))
             {
                 iconData.Icon = IconUtil.LoadBuiltinTexture("Warning");
+                iconData.AllowOverride = false;
             }
 
             // if a gameObject has an icon set

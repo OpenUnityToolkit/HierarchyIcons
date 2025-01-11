@@ -8,7 +8,7 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 {
     public static class VertexCount
     {
-        static readonly string KEY = $"{typeof(HierarchyLights).FullName}.config.";
+        static readonly string KEY = $"{typeof(VertexCount).FullName}.config.";
         public static bool IsEnabled => _setting.Value;
         private static SettingBool _setting = new SettingBool(KEY + "showVerts", "Show vertex count readout for meshes")
         {

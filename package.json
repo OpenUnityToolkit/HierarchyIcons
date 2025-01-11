@@ -1,0 +1,19 @@
+{
+  "name": "com.unityopentoolkit.hierarchyicons",
+  "displayName": "Hierarchy Icons",
+  "version": "0.9.0",
+  "description": "Adds components based icons to the Unity Scene Hierarchy Window.",
+  "license": "MIT",
+  "keywords": [
+    "icons",
+    "hierarchy",
+	  "scene",
+    "editor",
+    "tools"
+  ],
+    "author"       : {
+        "name" : "Jordan Russell",
+        "email" : "jordanrussell@live.com",
+		 "url": "https://github.com/UnityOpenToolkit"
+    }
+}

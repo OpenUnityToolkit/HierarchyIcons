@@ -78,11 +78,15 @@ namespace OpenToolkit.HierarchyIcons.Settings
 
         static int SettingSort(Setting a, Setting b)
         {
-            return a.Category.CompareTo(b.Category);
+            string stA = a.Category + b.Label;
+            string stB = b.Category + b.Label;
+            return stA.CompareTo(stB);
         }
 
         public void SetEditorSettings()
         {
+            _enabledSetting.Save();
+
             foreach (var setting in _settings)
             {
                 setting.Save();
@@ -101,11 +105,10 @@ namespace OpenToolkit.HierarchyIcons.Settings
 
         public override void OnGUI(string searchContext)
         {
-
             EditorGUI.BeginChangeCheck();
 
-            GUIStyle style = new GUIStyle (GUI.skin.label); 
-            style.margin=new RectOffset(7,0,7,0);
+            GUIStyle style = new GUIStyle(GUI.skin.label);
+            style.margin = new RectOffset(7, 0, 7, 0);
             EditorGUILayout.BeginVertical(style, GUILayout.MaxWidth(220));
 
             EditorGUIUtility.labelWidth = 250;
@@ -116,7 +119,6 @@ namespace OpenToolkit.HierarchyIcons.Settings
                 EditorGUILayout.Space(12);
                 EditorGUI.BeginDisabledGroup(!_enabledSetting.Value);
             }
-
 
             for (var i = 0; i < _settings.Count; i++)
             {
@@ -138,7 +140,6 @@ namespace OpenToolkit.HierarchyIcons.Settings
             }
 
             EditorGUILayout.EndVertical();
-
 
             if (EditorGUI.EndChangeCheck())
             {

@@ -16,13 +16,15 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Setup Project
-      run: dotnet new classlib --langVersion 7.3
-      run: rm ./Class1.cs
+      run: |
+           dotnet new classlib --langVersion 7.3
+           rm ./Class1.cs
     - name: Add packages
-      run: dotnet add package Unity3D.UnityEngine
-      run: dotnet add package UnityTechnologies.UnityEditor
-      run: dotnet add package StyleCop.Analyzers
-      run: dotnet add package Roslynator.Analyzers
-      run: dotnet add package SonarAnalyzer.CSharp
+      run: |
+           dotnet add package Unity3D.UnityEngine
+           dotnet add package UnityTechnologies.UnityEditor
+           dotnet add package StyleCop.Analyzers
+           dotnet add package Roslynator.Analyzers
+           dotnet add package SonarAnalyzer.CSharp
     - name: Format
       run: dotnet format --verify-no-changes --verbosity diagnostic

@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
@@ -12,6 +9,7 @@ namespace OpenToolkit.HierarchyIcons.Utility
     {
         public static void GetHierarchyWindowStatus(out bool isWindowFocused, out bool searching)
         {
+            isWindowFocused = false;
             searching = false;
             bool searchFocus = false;
 
@@ -28,7 +26,10 @@ namespace OpenToolkit.HierarchyIcons.Utility
                 }
             }
 
-            isWindowFocused = EditorWindow.focusedWindow?.GetType().Name == "SceneHierarchyWindow";
+            if (EditorWindow.focusedWindow != null)
+            {
+                isWindowFocused = EditorWindow.focusedWindow.GetType().Name == "SceneHierarchyWindow";
+            }
 
             if (searchFocus)
             {
@@ -89,6 +90,7 @@ namespace OpenToolkit.HierarchyIcons.Utility
             {
                 return null;
             }
+
             if (row >= ReflectionHelper.GetRowCount(treeController))
             {
                 return null;
@@ -96,12 +98,7 @@ namespace OpenToolkit.HierarchyIcons.Utility
 
             var item = ReflectionHelper.GetItem(row, treeController);
 
-            if (item != null)
-            {
-                return item;
-            }
-
-            return null;
+            return item;
         }
     }
 }

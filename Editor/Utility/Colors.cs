@@ -1,6 +1,5 @@
-using UnityEngine;
-
 using UnityEditor;
+using UnityEngine;
 
 namespace OpenToolkit.HierarchyIcons.Utility
 {
@@ -14,10 +13,8 @@ namespace OpenToolkit.HierarchyIcons.Utility
         public static readonly Color Both = new Color32(44, 93, 135, 255);
         public static readonly Color UnfocusedSelected = new Color32(77, 77, 77, 255);
 
-
         public static readonly Color TreeActive = new Color32(104, 104, 104, 255);
         public static readonly Color TreeInactive = new Color32(104, 104, 104, 128);
-
 
         public static readonly Color PrefabTreeActive = new Color32(91, 115, 150, 255);
         public static readonly Color PrefabTreeInactive = new Color32(91, 115, 150, 128);
@@ -25,56 +22,59 @@ namespace OpenToolkit.HierarchyIcons.Utility
         public static readonly Color Disabled = new Color32(127, 127, 127, 255);
         public static readonly Color Prefab = new Color32(125, 173, 243, 255);
 
-
-        static Texture2D _overlayBackground;
+        static Texture2D s_overlayBackground;
         public static Texture2D OverlayBackground
         {
             get
             {
-                if (_overlayBackground == null)
+                if (s_overlayBackground == null)
                 {
-                    _overlayBackground = IconUtil.LoadAsset("overlayBackground");
+                    s_overlayBackground = IconUtil.LoadAsset("overlayBackground");
                 }
-                return _overlayBackground;
+
+                return s_overlayBackground;
             }
         }
 
-        static Texture2D _prefabAddedOverlay;
+        static Texture2D s_prefabAddedOverlay;
         public static Texture2D PrefabAddedOverlay
         {
             get
             {
-                if (_prefabAddedOverlay == null)
+                if (s_prefabAddedOverlay == null)
                 {
-                    _prefabAddedOverlay = EditorGUIUtility.FindTexture("PrefabOverlayAdded Icon");
+                    s_prefabAddedOverlay = EditorGUIUtility.FindTexture("PrefabOverlayAdded Icon");
                 }
-                return _prefabAddedOverlay;
+
+                return s_prefabAddedOverlay;
             }
         }
 
-        static Texture2D _prefabModifiedOverlay;
+        static Texture2D s_prefabModifiedOverlay;
         public static Texture2D PrefabModifiedOverlay
         {
             get
             {
-                if (_prefabModifiedOverlay == null)
+                if (s_prefabModifiedOverlay == null)
                 {
-                    _prefabModifiedOverlay = EditorGUIUtility.FindTexture("PrefabOverlayModified Icon");
+                    s_prefabModifiedOverlay = EditorGUIUtility.FindTexture("PrefabOverlayModified Icon");
                 }
-                return _prefabModifiedOverlay;
+
+                return s_prefabModifiedOverlay;
             }
         }
 
-        static Texture2D _prefabRootOverlay;
+        static Texture2D s_prefabRootOverlay;
         public static Texture2D PrefabRootOverlay
         {
             get
             {
-                if (_prefabRootOverlay == null)
+                if (s_prefabRootOverlay == null)
                 {
-                    _prefabRootOverlay = IconUtil.LoadAsset("prefab overlay");
+                    s_prefabRootOverlay = IconUtil.LoadAsset("prefab overlay");
                 }
-                return _prefabRootOverlay;
+
+                return s_prefabRootOverlay;
             }
         }
 

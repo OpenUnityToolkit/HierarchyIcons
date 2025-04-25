@@ -10,13 +10,13 @@ namespace OpenToolkit.HierarchyIcons
 {
     public static class ReflectionHelper
     {
-        static BindingFlags FLAGS = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
+        const BindingFlags FLAGS = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
 
-        static Type SceneHierarchyWindowType = typeof(Editor).Assembly.GetType("UnityEditor.SceneHierarchyWindow");
-        static Type TreeViewControllerType = typeof(Editor).Assembly.GetType("UnityEditor.IMGUI.Controls.TreeViewController");
-        static Type ITreeViewDataSourceType = typeof(Editor).Assembly.GetType("UnityEditor.IMGUI.Controls.ITreeViewDataSource");
-        static Type TreeViewStateType = typeof(Editor).Assembly.GetType("UnityEditor.IMGUI.Controls.TreeViewState");
-        static Type RenameOverlayType = typeof(Editor).Assembly.GetType("UnityEditor.RenameOverlay");
+        static Type s_sceneHierarchyWindowType = typeof(Editor).Assembly.GetType("UnityEditor.SceneHierarchyWindow");
+        static Type s_treeViewControllerType = typeof(Editor).Assembly.GetType("UnityEditor.IMGUI.Controls.TreeViewController");
+        static Type s_iTreeViewDataSourceType = typeof(Editor).Assembly.GetType("UnityEditor.IMGUI.Controls.ITreeViewDataSource");
+        static Type s_treeViewStateType = typeof(Editor).Assembly.GetType("UnityEditor.IMGUI.Controls.TreeViewState");
+        static Type s_renameOverlayType = typeof(Editor).Assembly.GetType("UnityEditor.RenameOverlay");
 
         static MethodInfo s_isRenamingMethod;
         static PropertyInfo s_stateRenameOverlayProperty;
@@ -25,17 +25,17 @@ namespace OpenToolkit.HierarchyIcons
         {
             if (s_isRenamingMethod == null)
             {
-                s_isRenamingMethod = RenameOverlayType.GetMethod("IsRenaming");
+                s_isRenamingMethod = s_renameOverlayType.GetMethod("IsRenaming");
             }
 
             if (s_stateRenameOverlayProperty == null)
             {
-                s_stateRenameOverlayProperty = TreeViewStateType.GetProperty("renameOverlay", FLAGS);
+                s_stateRenameOverlayProperty = s_treeViewStateType.GetProperty("renameOverlay", FLAGS);
             }
 
             if (s_stateProperty == null)
             {
-                s_stateProperty = TreeViewControllerType.GetProperty("state", FLAGS);
+                s_stateProperty = s_treeViewControllerType.GetProperty("state", FLAGS);
             }
 
             var state = s_stateProperty.GetValue(treeController);
@@ -73,12 +73,12 @@ namespace OpenToolkit.HierarchyIcons
         {
             if (s_dataProperty == null)
             {
-                s_dataProperty = TreeViewControllerType.GetProperty("data", FLAGS);
+                s_dataProperty = s_treeViewControllerType.GetProperty("data", FLAGS);
             }
 
             if (s_getItemMethod == null)
             {
-                s_getItemMethod = ITreeViewDataSourceType.GetMethod("GetItem", FLAGS);
+                s_getItemMethod = s_iTreeViewDataSourceType.GetMethod("GetItem", FLAGS);
             }
 
             var data = s_dataProperty.GetValue(treeController);
@@ -96,12 +96,12 @@ namespace OpenToolkit.HierarchyIcons
         {
             if (s_dataProperty == null)
             {
-                s_dataProperty = TreeViewControllerType.GetProperty("data", FLAGS);
+                s_dataProperty = s_treeViewControllerType.GetProperty("data", FLAGS);
             }
 
             if (s_getRowMethod == null)
             {
-                s_getRowMethod = ITreeViewDataSourceType.GetMethod("GetRow", FLAGS);
+                s_getRowMethod = s_iTreeViewDataSourceType.GetMethod("GetRow", FLAGS);
             }
 
             var data = s_dataProperty.GetValue(treeController);
@@ -113,16 +113,16 @@ namespace OpenToolkit.HierarchyIcons
         {
             if (s_dataProperty == null)
             {
-                s_dataProperty = TreeViewControllerType.GetProperty("data", FLAGS);
+                s_dataProperty = s_treeViewControllerType.GetProperty("data", FLAGS);
             }
 
             if (s_getRowCountProperty == null)
             {
-                s_getRowCountProperty = ITreeViewDataSourceType.GetProperty("rowCount", FLAGS);
+                s_getRowCountProperty = s_iTreeViewDataSourceType.GetProperty("rowCount", FLAGS);
             }
 
             var data = s_dataProperty.GetValue(treeController);
-            return (int)s_getRowCountProperty.GetValue(data, new object[] { });
+            return (int)s_getRowCountProperty.GetValue(data, Array.Empty<object>());
         }
 
         static MethodInfo s_isExpandedMethod;
@@ -130,12 +130,12 @@ namespace OpenToolkit.HierarchyIcons
         {
             if (s_dataProperty == null)
             {
-                s_dataProperty = TreeViewControllerType.GetProperty("data", FLAGS);
+                s_dataProperty = s_treeViewControllerType.GetProperty("data", FLAGS);
             }
 
             if (s_isExpandedMethod == null)
             {
-                s_isExpandedMethod = ITreeViewDataSourceType.GetMethod("IsExpanded", new Type[] { typeof(int) });
+                s_isExpandedMethod = s_iTreeViewDataSourceType.GetMethod("IsExpanded", new Type[] { typeof(int) });
             }
 
             var data = s_dataProperty.GetValue(treeController);
@@ -147,8 +147,9 @@ namespace OpenToolkit.HierarchyIcons
         {
             if (s_isItemDragSelectedOrSelectedMethod == null)
             {
-                s_isItemDragSelectedOrSelectedMethod = TreeViewControllerType.GetMethod("IsItemDragSelectedOrSelected", FLAGS);
+                s_isItemDragSelectedOrSelectedMethod = s_treeViewControllerType.GetMethod("IsItemDragSelectedOrSelected", FLAGS);
             }
+
             return (bool)s_isItemDragSelectedOrSelectedMethod.Invoke(treeController, new object[] { item });
         }
 
@@ -157,9 +158,10 @@ namespace OpenToolkit.HierarchyIcons
         {
             if (s_hoverItemProperty == null)
             {
-                s_hoverItemProperty = TreeViewControllerType.GetProperty("hoveredItem", FLAGS);
+                s_hoverItemProperty = s_treeViewControllerType.GetProperty("hoveredItem", FLAGS);
             }
-            return s_hoverItemProperty.GetValue(treeController, new object[] { }) as TreeViewItem;
+
+            return s_hoverItemProperty.GetValue(treeController, Array.Empty<object>()) as TreeViewItem;
         }
 
         static PropertyInfo s_isDraggingProperty;
@@ -169,12 +171,14 @@ namespace OpenToolkit.HierarchyIcons
         {
             if (s_isDraggingProperty == null)
             {
-                s_isDraggingProperty = TreeViewControllerType.GetProperty("isDragging", FLAGS);
+                s_isDraggingProperty = s_treeViewControllerType.GetProperty("isDragging", FLAGS);
             }
+
             if (s_draggingProperty == null)
             {
-                s_draggingProperty = TreeViewControllerType.GetProperty("dragging", FLAGS);
+                s_draggingProperty = s_treeViewControllerType.GetProperty("dragging", FLAGS);
             }
+
             if (s_getDropTargetControlIDMethod == null)
             {
                 var tempDragging = s_draggingProperty.GetValue(treeController);
@@ -192,7 +196,7 @@ namespace OpenToolkit.HierarchyIcons
                 return false;
             }
 
-            int dropTargetId = (int)s_getDropTargetControlIDMethod.Invoke(dragging, new object[] { });
+            int dropTargetId = (int)s_getDropTargetControlIDMethod.Invoke(dragging, Array.Empty<object>());
 
             return isDragging && dragging != null && dropTargetId == 0;
         }
@@ -203,7 +207,7 @@ namespace OpenToolkit.HierarchyIcons
         {
             if (s_getSceneHierarchiesMethod == null)
             {
-                s_getSceneHierarchiesMethod = SceneHierarchyWindowType.GetMethod("GetAllSceneHierarchyWindows", BindingFlags.Public | BindingFlags.Static);
+                s_getSceneHierarchiesMethod = s_sceneHierarchyWindowType.GetMethod("GetAllSceneHierarchyWindows", BindingFlags.Public | BindingFlags.Static);
             }
 
             var list = (IList)s_getSceneHierarchiesMethod.Invoke(null, null);

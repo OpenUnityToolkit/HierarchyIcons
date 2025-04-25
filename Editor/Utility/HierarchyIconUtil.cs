@@ -1,6 +1,5 @@
-using UnityEngine;
-
 using UnityEditor;
+using UnityEngine;
 
 namespace OpenToolkit.HierarchyIcons.Utility
 {
@@ -60,6 +59,7 @@ namespace OpenToolkit.HierarchyIcons.Utility
         static Texture2D GetIconFromComponents(Component[] components, out Component component)
         {
             Texture2D icon;
+
             // start at 1 to skip transforms
             for (int i = 1; i < components.Length; i++)
             {
@@ -97,13 +97,7 @@ namespace OpenToolkit.HierarchyIcons.Utility
                 return null;
             }
 
-            Texture2D componentIcon = LoadComponentIcon(component);
-            if (componentIcon != null)
-            {
-                return componentIcon;
-            }
-
-            return null;
+            return LoadComponentIcon(component);
         }
 
         public static Texture2D LoadComponentIcon(Component component)
@@ -134,9 +128,9 @@ namespace OpenToolkit.HierarchyIcons.Utility
 
             if (component is MeshFilter meshFilter)
             {
-                MeshRenderer renderer = meshFilter.gameObject.GetComponent<MeshRenderer>();
+                bool hasRenderer = meshFilter.gameObject.TryGetComponent<MeshRenderer>(out var renderer);
 
-                if (renderer == null)
+                if (!hasRenderer)
                 {
                     return true;
                 }

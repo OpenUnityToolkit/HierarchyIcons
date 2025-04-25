@@ -1,17 +1,16 @@
-using UnityEngine;
-
-using UnityEditor;
-
 using OpenToolkit.HierarchyIcons.Settings;
 using OpenToolkit.HierarchyIcons.Utility;
+
+using UnityEditor;
+using UnityEngine;
 
 namespace OpenToolkit.HierarchyIcons.Extensions
 {
     public static class PrefabChangeOverlays
     {
-        static readonly string KEY = $"{typeof(PrefabChangeOverlays).FullName}.config.";
-        public static bool IsEnabled => _setting.Value;
-        private static SettingBool _setting = new SettingBool(KEY + "prefabOverlays", "Show prefab override overlays")
+        const string KEY = "PrefabChangeOverlays.config.";
+        public static bool IsEnabled => s_setting.Value;
+        private static SettingBool s_setting = new SettingBool(KEY + "prefabOverlays", "Show prefab override overlays")
         {
             Category = "Overlays",
             Tooltip = "Shows a '+' for gameObjects added to a prefab and an 'o' for gameObjects with overrides",
@@ -24,7 +23,7 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 
             HierarchyIconsSettings.OnSettingsChange += DoSubscriptions;
 
-            HierarchyIconsSettings.Add(_setting);
+            HierarchyIconsSettings.Add(s_setting);
         }
 
         static void DoSubscriptions()
@@ -84,11 +83,9 @@ namespace OpenToolkit.HierarchyIcons.Extensions
                         break;
                     }
                 }
-
             }
 
             return texture;
         }
-
     }
 }

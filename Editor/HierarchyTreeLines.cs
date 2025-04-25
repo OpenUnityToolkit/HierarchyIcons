@@ -1,9 +1,9 @@
-using UnityEngine;
+using OpenToolkit.HierarchyIcons.Settings;
+using OpenToolkit.HierarchyIcons.Utility;
 
 using UnityEditor;
 
-using OpenToolkit.HierarchyIcons.Settings;
-using OpenToolkit.HierarchyIcons.Utility;
+using UnityEngine;
 
 namespace OpenToolkit.HierarchyIcons
 {
@@ -56,7 +56,6 @@ namespace OpenToolkit.HierarchyIcons
             {
                 lineTex = IconUtil.LoadAsset("TreeLines/subHierarchyLine");
             }
-
 
             Rect linedRect = new Rect(rowRect);
             linedRect.x -= 22;
@@ -132,16 +131,13 @@ namespace OpenToolkit.HierarchyIcons
                     tex = IconUtil.LoadAsset("TreeLines/subHierarchyEnd");
                 }
             }
+            else if (gameObject.transform.childCount > 0)
+            {
+                tex = IconUtil.LoadAsset("TreeLines/subHierarchyJunctionShort");
+            }
             else
             {
-                if (gameObject.transform.childCount > 0)
-                {
-                    tex = IconUtil.LoadAsset("TreeLines/subHierarchyJunctionShort");
-                }
-                else
-                {
-                    tex = IconUtil.LoadAsset("TreeLines/subHierarchyJunction");
-                }
+                tex = IconUtil.LoadAsset("TreeLines/subHierarchyJunction");
             }
 
             return tex;

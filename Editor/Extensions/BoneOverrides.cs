@@ -1,24 +1,23 @@
 using System.Collections.Generic;
 
-using UnityEngine;
-
-using UnityEditor;
-
 using OpenToolkit.HierarchyIcons.Settings;
 using OpenToolkit.HierarchyIcons.Utility;
+
+using UnityEditor;
+using UnityEngine;
 
 namespace OpenToolkit.HierarchyIcons.Extensions
 {
     public static class BoneOverrides
     {
-        static readonly string KEY = $"{typeof(BoneOverrides).FullName}.config.";
-        public static bool IsEnabled => _setting.Value;
-        private static SettingBool _setting = new SettingBool(KEY + "boneIcons", "Show icon for skinned mesh bones", defaultValue: false)
+        const string KEY = "BoneOverrides.config.";
+        public static bool IsEnabled => s_setting.Value;
+        private static SettingBool s_setting = new SettingBool(KEY + "boneIcons", "Show icon for skinned mesh bones", defaultValue: false)
         {
             Category = "Icons",
         };
 
-        static HashSet<Transform> bones = new HashSet<Transform>();
+        static HashSet<Transform> s_bones = new HashSet<Transform>();
 
         [InitializeOnLoadMethod]
         public static void Init()
@@ -27,21 +26,20 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 
             HierarchyIconsSettings.OnSettingsChange += DoSubscriptions;
 
-            HierarchyIconsSettings.Add(_setting);
+            HierarchyIconsSettings.Add(s_setting);
         }
 
         static void DoSubscriptions()
         {
-            HierarchyIcons.OnClearCache -= bones.Clear;
+            HierarchyIcons.OnClearCache -= s_bones.Clear;
             HierarchyIcons.OnCreateIconData -= RecordBones;
 
             if (IsEnabled)
             {
-                HierarchyIcons.OnClearCache += bones.Clear;
+                HierarchyIcons.OnClearCache += s_bones.Clear;
                 HierarchyIcons.OnCreateIconData += RecordBones;
             }
         }
-
 
         private static void RecordBones(IconData iconData)
         {
@@ -50,20 +48,19 @@ namespace OpenToolkit.HierarchyIcons.Extensions
                 return;
             }
 
-            var skinnedMeshRenderer = iconData.GameObject.GetComponent<SkinnedMeshRenderer>();
-            if (skinnedMeshRenderer != null)
+            if (iconData.GameObject.TryGetComponent<SkinnedMeshRenderer>(out var skinnedMeshRenderer))
             {
                 var skinnedMeshBones = skinnedMeshRenderer.bones;
                 foreach (var bone in skinnedMeshBones)
                 {
-                    bones.Add(bone);
+                    s_bones.Add(bone);
 
                     HierarchyIcons.ClearFromIconCache(bone.gameObject.GetInstanceID());
                 }
             }
 
             // is a bone
-            if (bones.Contains(iconData.GameObject.transform))
+            if (s_bones.Contains(iconData.GameObject.transform))
             {
                 iconData.Icon = IconUtil.LoadAsset("Mesh/bone");
             }

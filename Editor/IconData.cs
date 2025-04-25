@@ -4,30 +4,27 @@ namespace OpenToolkit.HierarchyIcons
 {
     public class IconData
     {
-        public Color ColorOverride;
-        public bool HasColorOverride;
-        public Texture2D IconUncolored;
+        public Color ColorOverride { get; set; }
+        public bool HasColorOverride { get; set; }
+        public Texture2D IconUncolored { get; set; }
 
-        public Texture2D Icon;
-        public Texture2D IconExpanded;
+        public Texture2D Icon { get; set; }
+        public Texture2D IconExpanded { get; set; }
 
-        public Texture2D IconOverlay;
+        public Texture2D IconOverlay { get; set; }
 
-        public Texture2D PrefabIcon;
+        public Texture2D PrefabIcon { get; set; }
 
-        public Component Component;
+        public Component Component { get; set; }
 
-        public Component[] Components;
+        public Component[] Components { get; set; }
 
-        public GameObject GameObject;
+        public GameObject GameObject { get; set; }
 
-        public Mesh Mesh;
+        public Mesh Mesh { get; set; }
 
-        public bool HideIconWhenPrefab;
+        public bool HideIconWhenPrefab { get; set; }
 
-        public bool AllowOverride = true;
-
-        public IconData() { }
-
+        public bool AllowOverride { get; set; } = true;
     }
 }

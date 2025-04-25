@@ -1,17 +1,16 @@
-using UnityEngine;
-
-using UnityEditor;
-
 using OpenToolkit.HierarchyIcons.Settings;
 using OpenToolkit.HierarchyIcons.Utility;
+
+using UnityEditor;
+using UnityEngine;
 
 namespace OpenToolkit.HierarchyIcons.Extensions
 {
     public static class ManagerOverrides
     {
-        static readonly string KEY = $"{typeof(ManagerOverrides).FullName}.config.";
-        public static bool IsEnabled => _setting.Value;
-        private static SettingBool _setting = new SettingBool(KEY + "managerOverrides", "Show managers icons")
+        const string KEY = "ManagerOverrides.config.";
+        public static bool IsEnabled => s_setting.Value;
+        private static SettingBool s_setting = new SettingBool(KEY + "managerOverrides", "Show managers icons")
         {
             Category = "Icons",
             Tooltip = "Component types or Game Object names containing 'manager', 'system', or 'controller' are shown as cogs",
@@ -24,7 +23,7 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 
             HierarchyIconsSettings.OnSettingsChange += DoSubscriptions;
 
-            HierarchyIconsSettings.Add(_setting);
+            HierarchyIconsSettings.Add(s_setting);
         }
 
         static void DoSubscriptions()
@@ -81,13 +80,7 @@ namespace OpenToolkit.HierarchyIcons.Extensions
                 return null;
             }
 
-            stringIcon = FindStringMatchIcons(component.GetType().Name);
-            if (stringIcon != null)
-            {
-                return stringIcon;
-            }
-
-            return null;
+            return FindStringMatchIcons(component.GetType().Name);
         }
 
         static Texture2D FindStringMatchIcons(string componentName)
@@ -102,17 +95,19 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 
         public static bool IsManager(string name)
         {
-            if (name.ToLower().Contains("manager"))
+            name = name.ToUpperInvariant();
+
+            if (name.Contains("MANAGER"))
             {
                 return true;
             }
 
-            if (name.ToLower().Contains("controller"))
+            if (name.Contains("CONTROLLER"))
             {
                 return true;
             }
 
-            if (name.ToLower().Contains("system"))
+            if (name.Contains("SYSTEM"))
             {
                 return true;
             }

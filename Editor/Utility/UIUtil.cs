@@ -1,14 +1,13 @@
 using System.Globalization;
 
-using UnityEngine;
-
 using UnityEditor;
+using UnityEngine;
 
 namespace OpenToolkit.HierarchyIcons.Utility
 {
     public static class UIUtil
     {
-        static string PLAY_MODE_DARKEN_KEY = "Playmode tint";
+        const string PLAY_MODE_DARKEN_KEY = "Playmode tint";
 
         public static void DrawIcon(Rect rect, Texture texture)
         {
@@ -23,9 +22,9 @@ namespace OpenToolkit.HierarchyIcons.Utility
                 rect.y += (rect.height - (rect.height * ratio)) * 0.5f;
                 rect.height *= ratio;
             }
+
             if (texture.height > texture.width)
             {
-
                 float ratio = (float)texture.width / texture.height;
                 rect.x += (rect.width - (rect.width * ratio)) * 0.5f;
                 rect.width *= ratio;
@@ -39,7 +38,6 @@ namespace OpenToolkit.HierarchyIcons.Utility
             if (PrefabUtility.IsPartOfAnyPrefab(iconData.GameObject))
             {
                 return GetPrefabStyle(iconData, isSelected);
-
             }
             else
             {
@@ -83,18 +81,15 @@ namespace OpenToolkit.HierarchyIcons.Utility
                     style.hover.textColor = Colors.PrefabInactive;
                 }
             }
+            else if (isSelected)
+            {
+                style.normal.textColor = Color.white;
+                style.hover.textColor = Color.white;
+            }
             else
             {
-                if (isSelected)
-                {
-                    style.normal.textColor = Color.white;
-                    style.hover.textColor = Color.white;
-                }
-                else
-                {
-                    style.normal.textColor = Colors.Prefab;
-                    style.hover.textColor = Colors.Prefab;
-                }
+                style.normal.textColor = Colors.Prefab;
+                style.hover.textColor = Colors.Prefab;
             }
 
             return style;
@@ -115,10 +110,10 @@ namespace OpenToolkit.HierarchyIcons.Utility
             split[3] = split[3].Replace(',', '.');
             split[4] = split[4].Replace(',', '.');
 
-            bool success = float.TryParse(split[1], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out var r);
-            success &= float.TryParse(split[2], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out var g);
-            success &= float.TryParse(split[3], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out var b);
-            success &= float.TryParse(split[4], NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture.NumberFormat, out var a);
+            bool success = float.TryParse(split[1], NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out var r);
+            success &= float.TryParse(split[2], NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out var g);
+            success &= float.TryParse(split[3], NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out var b);
+            success &= float.TryParse(split[4], NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out var a);
 
             if (success)
             {

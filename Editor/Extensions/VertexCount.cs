@@ -1,20 +1,18 @@
-using UnityEngine;
+using OpenToolkit.HierarchyIcons.Settings;
 
 using UnityEditor;
-
-using OpenToolkit.HierarchyIcons.Settings;
+using UnityEngine;
 
 namespace OpenToolkit.HierarchyIcons.Extensions
 {
     public static class VertexCount
     {
-        static readonly string KEY = $"{typeof(VertexCount).FullName}.config.";
-        public static bool IsEnabled => _setting.Value;
-        private static SettingBool _setting = new SettingBool(KEY + "showVerts", "Show vertex count readout for meshes")
+        const string KEY = "FullName.config.";
+        public static bool IsEnabled => s_setting.Value;
+        private static SettingBool s_setting = new SettingBool(KEY + "showVerts", "Show vertex count readout for meshes")
         {
             Category = "Meshes"
         };
-
 
         [InitializeOnLoadMethod]
         public static void Init()
@@ -23,7 +21,7 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 
             HierarchyIconsSettings.OnSettingsChange += DoSubscriptions;
 
-            HierarchyIconsSettings.Add(_setting);
+            HierarchyIconsSettings.Add(s_setting);
         }
 
         static void DoSubscriptions()

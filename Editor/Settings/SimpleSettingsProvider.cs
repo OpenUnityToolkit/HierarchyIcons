@@ -1,69 +1,22 @@
 using System;
 using System.Collections.Generic;
 
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-using UnityEditor;
-
 namespace OpenToolkit.HierarchyIcons.Settings
 {
-    public abstract class Setting
-    {
-        public string Key;
-        public string Label;
-
-        public string Tooltip;
-
-        public string Category;
-
-        public abstract void Draw();
-        public abstract void Load();
-        public abstract void Save();
-    }
-
-    public class SettingBool : Setting
-    {
-        public bool Value => _value;
-
-        bool _value;
-
-        public SettingBool(string key, string label, bool defaultValue = true)
-        {
-            Key = key;
-            Label = label;
-            _value = defaultValue;
-
-            Load();
-        }
-
-        public override void Draw()
-        {
-            var content = new GUIContent(Label, Tooltip);
-            _value = EditorGUILayout.Toggle(content, _value);
-        }
-
-        public override void Load()
-        {
-            _value = EditorPrefs.GetBool(Key, _value);
-        }
-
-        public override void Save()
-        {
-            EditorPrefs.SetBool(Key, _value);
-        }
-    }
-
     class SimpleSettingsProvider : SettingsProvider
     {
-        List<Setting> _settings;
+        readonly List<Setting> _settings;
 
-        SettingBool _enabledSetting;
+        readonly SettingBool _enabledSetting;
 
-        public Action OnSettingsChange;
+        public event Action OnSettingsChange;
 
-
-        public SimpleSettingsProvider(string path, List<Setting> settings, SettingBool enabledSetting = null, SettingsScope scope = SettingsScope.User) : base(path, scope)
+        public SimpleSettingsProvider(string path, List<Setting> settings, SettingBool enabledSetting = null, SettingsScope scope = SettingsScope.User)
+             : base(path, scope)
         {
             _settings = settings;
             _enabledSetting = enabledSetting;

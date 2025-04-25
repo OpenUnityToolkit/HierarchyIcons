@@ -1,8 +1,8 @@
-using UnityEditor;
-using UnityEngine;
-
 using System.Collections.Generic;
 using System.Reflection;
+
+using UnityEditor;
+using UnityEngine;
 
 namespace OpenToolkit.HierarchyIcons.Utility
 {
@@ -12,7 +12,9 @@ namespace OpenToolkit.HierarchyIcons.Utility
         const string FOLDER_NAME = "OpenToolkit/HierarchyIcons";
         const string ICON_FOLDER = "Editor Resources/Textures";
 
-        static readonly string[] POTENTIAL_FOLDERS =
+        const BindingFlags FLAGS = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static;
+
+        static readonly string[] s_potentialFolders =
         {
             $"Packages/{PACKAGE_NAME}/{ICON_FOLDER}",
             $"Assets/Plugins/{FOLDER_NAME}/{ICON_FOLDER}",
@@ -22,28 +24,27 @@ namespace OpenToolkit.HierarchyIcons.Utility
         static MethodInfo s_loadIconMethod;
         static MethodInfo s_getObjectIconMethod;
 
-        static readonly BindingFlags FLAGS = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static;
-
         static Dictionary<string, Texture2D> s_cache = new Dictionary<string, Texture2D>();
 
         public static Texture2D LoadAsset(string path)
         {
             path = $"{path}.png";
-            return FindTextureAsset(path, POTENTIAL_FOLDERS);
+            return FindTextureAsset(path, s_potentialFolders);
         }
+
         public static Texture2D FindTextureAsset(string path, string[] locations)
         {
             foreach (string location in locations)
             {
                 string fullPath = $"{location}/{path}";
 
-                if (s_cache.ContainsKey(path))
+                if (s_cache.TryGetValue(path, out var value))
                 {
-                    return s_cache[path];
+                    return value;
                 }
                 else
                 {
-                    Texture2D texture = (Texture2D)AssetDatabase.LoadAssetAtPath(fullPath, typeof(Texture2D));
+                    Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(fullPath);
                     if (texture != null)
                     {
                         s_cache[path] = texture;
@@ -98,7 +99,6 @@ namespace OpenToolkit.HierarchyIcons.Utility
             {
                 return LoadAsset("Prefabs/PrefabOverride");
             }
-
             else if (IsPrefabOverride(gameObject))
             {
                 return LoadAsset("Prefabs/PrefabOverride");
@@ -140,14 +140,10 @@ namespace OpenToolkit.HierarchyIcons.Utility
                     return true;
                 }
 
-                Component overrideComponent = ovr.instanceObject as Component;
-                if (overrideComponent == null)
+                if (ovr.instanceObject is Component overrideComponent &&
+                    overrideComponent.transform.IsChildOf(gameObject.transform))
                 {
-                    continue;
-                }
-                if (overrideComponent.transform.IsChildOf(gameObject.transform))
-                {
-                    if (overrideComponent as Transform)
+                    if (overrideComponent is Transform)
                     {
                         continue;
                     }

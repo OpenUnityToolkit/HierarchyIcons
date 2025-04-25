@@ -1,29 +1,28 @@
-using UnityEngine;
-
-using UnityEditor;
-
 using OpenToolkit.HierarchyIcons.Settings;
 using OpenToolkit.HierarchyIcons.Utility;
+
+using UnityEditor;
+using UnityEngine;
 
 namespace OpenToolkit.HierarchyIcons.Extensions
 {
     public static class MeshOverrides
     {
-        static readonly string KEY = $"{typeof(MeshOverrides).FullName}.config";
-        public static bool ShowPrimitivesIcon => _showPrimitivesIcon.Value;
-        private static SettingBool _showPrimitivesIcon = new SettingBool($"{KEY}.showPrimitivesIcon", "Show indicative icons for meshes")
+        const string KEY = "MeshOverrides.config";
+        public static bool ShowPrimitivesIcon => s_showPrimitivesIcon.Value;
+        private static SettingBool s_showPrimitivesIcon = new SettingBool($"{KEY}.showPrimitivesIcon", "Show indicative icons for meshes")
         {
             Category = "Meshes"
         };
-        public static bool ShowColliderShape => _showColliderShape.Value;
-        private static SettingBool _showColliderShape = new SettingBool($"{KEY}.config.showColliderShape", "Show colliders shapes as icons")
+        public static bool ShowColliderShape => s_showColliderShape.Value;
+        private static SettingBool s_showColliderShape = new SettingBool($"{KEY}.config.showColliderShape", "Show colliders shapes as icons")
         {
             Category = "Meshes"
         };
 
-        public static readonly Color MESH_COLOR = new Color32(168, 176, 235, 255);
-        public static readonly Color TRIGGER_COLOR = new Color32(247, 162, 80, 255);
-        public static readonly Color COLLIDER_COLOR = new Color32(177, 255, 96, 255);
+        public static readonly Color MeshColor = new Color32(168, 176, 235, 255);
+        public static readonly Color TriggerColor = new Color32(247, 162, 80, 255);
+        public static readonly Color ColliderColor = new Color32(177, 255, 96, 255);
 
         [InitializeOnLoadMethod]
         public static void Init()
@@ -32,8 +31,8 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 
             HierarchyIconsSettings.OnSettingsChange += DoSubscriptions;
 
-            HierarchyIconsSettings.Add(_showPrimitivesIcon);
-            HierarchyIconsSettings.Add(_showColliderShape);
+            HierarchyIconsSettings.Add(s_showPrimitivesIcon);
+            HierarchyIconsSettings.Add(s_showColliderShape);
         }
 
         static void DoSubscriptions()
@@ -45,7 +44,6 @@ namespace OpenToolkit.HierarchyIcons.Extensions
                 HierarchyIcons.OnCreateIconData += IconDataCreated;
             }
         }
-
 
         static void IconDataCreated(IconData iconData)
         {
@@ -63,7 +61,7 @@ namespace OpenToolkit.HierarchyIcons.Extensions
                 {
                     iconData.Icon = texture;
                     iconData.HasColorOverride = true;
-                    iconData.ColorOverride = MESH_COLOR;
+                    iconData.ColorOverride = MeshColor;
 
                     return;
                 }
@@ -76,7 +74,7 @@ namespace OpenToolkit.HierarchyIcons.Extensions
                 {
                     iconData.Icon = texture;
                     iconData.HasColorOverride = true;
-                    iconData.ColorOverride = collider.isTrigger ? TRIGGER_COLOR : COLLIDER_COLOR;
+                    iconData.ColorOverride = collider.isTrigger ? TriggerColor : ColliderColor;
                 }
             }
         }
@@ -109,7 +107,7 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 
         static Texture2D GetColliderIcon(Collider collider)
         {
-            string additive = collider.isTrigger ? "_wire" : "";
+            string additive = collider.isTrigger ? "_wire" : string.Empty;
 
             if (collider is BoxCollider)
             {
@@ -163,16 +161,12 @@ namespace OpenToolkit.HierarchyIcons.Extensions
                 return null;
             }
 
-            string meshName = mesh.name.ToLower();
-
-            if (TryParsePrimitive(meshName, out string primitive))
+            if (TryParsePrimitive(mesh.name, out string primitive))
             {
                 return primitive;
             }
 
-            string gameObjectName = gameObject.name.ToLower();
-
-            if (TryParsePrimitive(gameObjectName, out primitive))
+            if (TryParsePrimitive(gameObject.name, out primitive))
             {
                 return primitive;
             }
@@ -191,33 +185,35 @@ namespace OpenToolkit.HierarchyIcons.Extensions
             return null;
         }
 
-        private static bool TryParsePrimitive(string meshName, out string primitive)
+        private static bool TryParsePrimitive(string toParse, out string primitive)
         {
-            if (meshName.Contains("cube"))
+            toParse = toParse.ToUpperInvariant();
+
+            if (toParse.Contains("CUBE"))
             {
                 primitive = "cube";
                 return true;
             }
 
-            if (meshName.Contains("sphere"))
+            if (toParse.Contains("SPHERE"))
             {
                 primitive = "sphere";
                 return true;
             }
 
-            if (meshName.Contains("plane"))
+            if (toParse.Contains("PLANE"))
             {
                 primitive = "plane";
                 return true;
             }
 
-            if (meshName.Contains("cylinder"))
+            if (toParse.Contains("CYLINDER"))
             {
                 primitive = "cylinder";
                 return true;
             }
 
-            if (meshName.Contains("capsule"))
+            if (toParse.Contains("CAPSULE"))
             {
                 primitive = "capsule";
                 return true;

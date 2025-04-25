@@ -1,17 +1,16 @@
-using UnityEngine;
-
-using UnityEditor;
-
 using OpenToolkit.HierarchyIcons.Settings;
 using OpenToolkit.HierarchyIcons.Utility;
+
+using UnityEditor;
+using UnityEngine;
 
 namespace OpenToolkit.HierarchyIcons.Extensions
 {
     public static class BuiltinOverrides
     {
-        static readonly string KEY = $"{typeof(BuiltinOverrides).FullName}.config.";
-        public static bool IsEnabled => _setting.Value;
-        private static SettingBool _setting = new SettingBool(KEY + "alternateBuiltIn", "Show alternate builtin icons")
+        const string KEY = "BuiltinOverrides.config.";
+        public static bool IsEnabled => s_setting.Value;
+        private static SettingBool s_setting = new SettingBool(KEY + "alternateBuiltIn", "Show alternate builtin icons")
         {
             Category = "Icons",
             Tooltip = "Recoloured builtin icons to increase distinction, mainly affects UI components",
@@ -24,7 +23,7 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 
             HierarchyIconsSettings.OnSettingsChange += DoSubscriptions;
 
-            HierarchyIconsSettings.Add(_setting);
+            HierarchyIconsSettings.Add(s_setting);
         }
 
         static void DoSubscriptions()

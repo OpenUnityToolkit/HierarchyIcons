@@ -1,21 +1,19 @@
-using UnityEngine;
-
-using UnityEditor;
-
 using OpenToolkit.HierarchyIcons.Settings;
 using OpenToolkit.HierarchyIcons.Utility;
+
+using UnityEditor;
+using UnityEngine;
 
 namespace OpenToolkit.HierarchyIcons.Extensions
 {
     public static class LightOverrides
     {
-        static readonly string KEY = $"{typeof(LightOverrides).FullName}.config.";
-        public static bool IsEnabled => _setting.Value;
-        private static SettingBool _setting = new SettingBool(KEY + "showLightColors", "Show light colours")
+        const string KEY = "LightOverrides.config.";
+        public static bool IsEnabled => s_setting.Value;
+        private static SettingBool s_setting = new SettingBool(KEY + "showLightColors", "Show light colours")
         {
             Category = "Icons"
         };
-
 
         [InitializeOnLoadMethod]
         public static void Init()
@@ -24,7 +22,7 @@ namespace OpenToolkit.HierarchyIcons.Extensions
 
             HierarchyIconsSettings.OnSettingsChange += DoSubscriptions;
 
-            HierarchyIconsSettings.Add(_setting);
+            HierarchyIconsSettings.Add(s_setting);
         }
 
         static void DoSubscriptions()
@@ -64,7 +62,7 @@ namespace OpenToolkit.HierarchyIcons.Extensions
                 {
                     SetLight(iconData, "Lights/directional_light", "Lights/directional_fixture");
                 }
-                else if (light.type == LightType.Area)
+                else if (light.type == LightType.Rectangle)
                 {
                     SetLight(iconData, "Lights/area_light", "Lights/area_fixture");
                 }

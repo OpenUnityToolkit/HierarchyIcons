@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 
-using UnityEngine;
-using UnityEngine.SceneManagement;
-
-using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEditor.IMGUI.Controls;
-
 using OpenToolkit.HierarchyIcons.Settings;
 using OpenToolkit.HierarchyIcons.Utility;
+
+using UnityEditor;
+using UnityEditor.IMGUI.Controls;
+using UnityEditor.SceneManagement;
+
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace OpenToolkit.HierarchyIcons
 {
@@ -17,9 +17,8 @@ namespace OpenToolkit.HierarchyIcons
     {
         static Dictionary<int, IconData> s_iconCache = new Dictionary<int, IconData>();
 
-        static int[] s_lastSelectionIDs = new int[0];
+        static int[] s_lastSelectionIDs;
         static StageHandle s_lastStage;
-
 
         static Color s_editorTint = Color.white;
         static object s_treeController;
@@ -28,10 +27,9 @@ namespace OpenToolkit.HierarchyIcons
 
         static double s_lastFrame;
 
-        public static Action OnClearCache;
-        public static Action<IconData> OnCreateIconData;
-        public static Action<IconData, Rect, GUIStyle> OnDrawRow;
-
+        public static event Action OnClearCache;
+        public static event Action<IconData> OnCreateIconData;
+        public static event Action<IconData, Rect, GUIStyle> OnDrawRow;
 
         [InitializeOnLoadMethod]
         public static void Init()
@@ -62,13 +60,24 @@ namespace OpenToolkit.HierarchyIcons
             EditorSceneManager.sceneOpened -= SceneOpened;
             Selection.selectionChanged -= OnSelectionChange;
             HierarchyIconsSettings.OnSettingsChange -= ClearIconCache;
+            EditorApplication.playModeStateChanged -= PlayModeChanged;
 
-            if (HierarchyIconsSettings.FeatureEnabled)
+            if (HierarchyIconsSettings.OVerallFeatureEnabled)
             {
                 EditorApplication.hierarchyWindowItemOnGUI += HierarchyWindowItemCallback;
                 EditorSceneManager.sceneOpened += SceneOpened;
                 Selection.selectionChanged += OnSelectionChange;
                 HierarchyIconsSettings.OnSettingsChange += ClearIconCache;
+                EditorApplication.playModeStateChanged += PlayModeChanged;
+            }
+        }
+
+        static void PlayModeChanged(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.EnteredEditMode ||
+                state == PlayModeStateChange.EnteredPlayMode)
+            {
+                ClearIconCache();
             }
         }
 
@@ -104,6 +113,11 @@ namespace OpenToolkit.HierarchyIcons
 
         public static void ClearFromIconCache(params int[] instances)
         {
+            if (instances == null)
+            {
+                return;
+            }
+
             foreach (int instanceId in instances)
             {
                 s_iconCache.Remove(instanceId);
@@ -120,7 +134,10 @@ namespace OpenToolkit.HierarchyIcons
             {
                 foreach (var window in s_hierarchyWindows)
                 {
-                    window?.Repaint();
+                    if (window != null)
+                    {
+                        window.Repaint();
+                    }
                 }
             }
         }
@@ -154,14 +171,13 @@ namespace OpenToolkit.HierarchyIcons
         {
             IconData iconData;
 
-            if (s_iconCache.ContainsKey(instanceID) && s_iconCache[instanceID] != null)
+            if (s_iconCache.TryGetValue(instanceID, out var value) && value != null)
             {
-                iconData = s_iconCache[instanceID];
+                iconData = value;
             }
             else
             {
-                GameObject gameObject = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
-                if (gameObject == null)
+                if (!(EditorUtility.InstanceIDToObject(instanceID) is GameObject gameObject))
                 {
                     return;
                 }
@@ -181,7 +197,7 @@ namespace OpenToolkit.HierarchyIcons
 
             if (HierarchyIconsSettings.ShowRowBands)
             {
-                // we do the background twice as we don't draw over the prefab 
+                // we do the background twice as we don't draw over the prefab
                 // open button with the current background draw, but want the
                 // colours to match
                 DrawNextBackground(itemRect, isOdd);
@@ -212,7 +228,7 @@ namespace OpenToolkit.HierarchyIcons
 
             Rect labelRect = new Rect(itemRect);
             labelRect.x += 17;
-            labelRect.y -= 1;
+            labelRect.y--;
 
             string labelString = iconData.GameObject.name;
 
